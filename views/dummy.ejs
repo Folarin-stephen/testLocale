@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Req Query</title>
+    <link rel="stylesheet" href="main.css">
+</head>
+<body>
+
+    <div class="main-container">
+
+        <div class="header">
+            
+            <nav>
+                <ul>
+                    <li><a href="/" float="left">locale</a></li>
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#news">News</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                    <li ><a href="#about">About</a></li>
+                  </ul>
+            </nav>
+        </div>
+
+        <div class="search-container">
+            <form action="/search"  method="get">
+                <label for="region">
+                <h3>Region</h3>
+                </label>
+                <select name="region" id="region">
+                    <option value="South-South" input type="search" name="region" placeholder="">South South</option>
+                    <option value="South-West" input type="search" name="region" placeholder="">South West</option>
+                    <option value="South-East" input type="search" name="region" placeholder="">South-East</option>
+                    <option value="North Central" input type="search" name="region" placeholder="">North-Central</option>
+                    <option value="North-West" input type="search" name="region" placeholder="">North-West</option>
+                    <option value="North-East" input type="search" name="region" placeholder="">North-East</option>
+                </select>
+                <label for="state">
+                <h3>State</h3>
+                </label>
+                <select name="state" id="region">
+                    <option value="South-South" input type="search" name="region" placeholder="">South South</option>
+                    <option value="South-West" input type="search" name="region" placeholder="">South West</option>
+                    <option value="South-East" input type="search" name="region" placeholder="">South-East</option>
+                    <option value="North Central" input type="search" name="region" placeholder="">North-Central</option>
+                    <option value="North-West" input type="search" name="region" placeholder="">North-West</option>
+                    <option value="North-East" input type="search" name="region" placeholder="">North-East</option>
+                </select>
+        
+                <input type="submit" value="Submit">
+            </form>
+        </div>
+       
+    </div>
+
+    this.router.get(`${this.path}`, authenticated, this.getUser);
+    
+</body>
+</html>

@@ -1,0 +1,20 @@
+<div class="container">
+    <% regions.forEach(function(region) { %>
+        <div class="region">
+            <h2><%= region.geopolitical_zone %></h2>
+
+            <ul class="states">
+                <% region.states.forEach(function(state) { %>
+                    <li><strong><%= state.name %></strong>: Capital - <%= state.capital %></li>
+                <% }); %>
+            </ul>
+
+            <div class="history">
+                <h3>History</h3>
+                <p><%= region.history.pre_colonial_era %></p>
+                <p><%= region.history.colonial_era %></p>
+                <!-- Add more paragraphs for other historical sections -->
+            </div>
+        </div>
+    <% }); %>
+</div>
