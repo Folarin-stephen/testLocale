@@ -35,7 +35,8 @@
   "_moduleAliases": {
     "@/resources": "dist/resources",
     "@/utils": "dist/utils",
-    "@/middleware": "dist/middleware"
+    "@/middleware": "dist/middleware",
+    "@/views": "/views"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
