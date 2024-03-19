@@ -42,6 +42,9 @@ class App {
 
     private initialiseControllers(controllers: Controller[]): void {
         controllers.forEach((controller: Controller) => {
+            this.express.get('/', (req, res) => {
+                res.render('index')
+            })
             this.express.use('/', controller.router);
         });
     }
