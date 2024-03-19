@@ -55,6 +55,10 @@ class UserService {
             throw new Error('Unable to create user');
         }
     }
+
+    // public async logout(
+
+    // )
 }
 
 export default UserService;

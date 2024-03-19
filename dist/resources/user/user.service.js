@@ -17,6 +17,8 @@ const token_1 = __importDefault(require("@/utils/token"));
 class UserService {
     constructor() {
         this.user = user_model_1.default;
+        // public async logout(
+        // )
     }
     /**
      * Register a new user

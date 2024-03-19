@@ -7,13 +7,15 @@ import UserService from '@/resources/user/user.service';
 import authenticated from '@/middleware/authenticated.middleware';
 import verifyCookie from '@/middleware/cookie_authentication';
 import RegionModel from '@/resources/region/region.model';
+import Blacklist from '@/resources/user/user.blaclistModel';
 
 class UserController implements Controller {
     public path = '/users';
     public router = Router();
     private UserService = new UserService();
     private region = RegionModel
-    public userlayout = '../layouts/user-layout'
+    private blaclist = Blacklist
+    public userlayout = '.././views/layouts/user-layout'
 
     constructor() {
         this.initialiseRoutes();
@@ -22,7 +24,7 @@ class UserController implements Controller {
     private initialiseRoutes(): void {
         // this.router.get(`${this.path}`, authenticated, this.getUser)
         this.router.get(`${this.path}`, verifyCookie, this.getUser)
-        this.router.get(`${this.path}/welcome`,  this.welcome);
+        this.router.get('/',  this.welcome);
         this.router.get(`${this.path}/login`,  this.userLogin);
         this.router.get(`${this.path}/signup`,  this.user_signup);
         this.router.get(
@@ -41,6 +43,10 @@ class UserController implements Controller {
             validationMiddleware(validate.login),
             this.login
         );
+        this.router.get(
+            `${this.path}/logout`,
+            this.user_logout
+        )
         
         
         
@@ -131,6 +137,36 @@ class UserController implements Controller {
         // res.json({data: 'Welcome to our api'})
     }
 
+    private user_logout = async (
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ): Promise<Response | void> => {
+        try {
+            const authHeader = req.headers['cookie']; // get the session cookie from request header
+            if (!authHeader) return res.sendStatus(204); // No content
+            const cookie = authHeader.split('=')[1]; // If there is, split the cookie string to get the actual jwt token
+            const accessToken = cookie.split(';')[0];
+            const checkIfBlacklisted = await Blacklist.findOne({ token: accessToken }); // Check if that token is blacklisted
+            // if true, send a no content response.
+            if (checkIfBlacklisted) return res.sendStatus(204);
+            // otherwise blacklist token
+            const newBlacklist = new this.blaclist({
+              token: accessToken,
+            });
+            await newBlacklist.save();
+            // Also clear request cookie on client
+            res.setHeader('Clear-Site-Data', '"cookies"');
+            res.redirect('login');
+          } catch (err) {
+            res.status(500).json({
+              status: 'error',
+              message: 'Internal Server Error',
+            });
+          }
+          res.end();
+    }
+    
        private findRegion = async (
         req: Request,
         res: Response,

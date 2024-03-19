@@ -1,4 +1,9 @@
-
+const logoutId = document.getElementById("logout")
+logoutId.addEventListener('click', (event) => {
+  event.preventDefault();
+  alert("You are logged out successfuly");
+  window.location.href ='/login'
+})
 
 function myFunction() {
     var x = document.getElementById("myTopnav");

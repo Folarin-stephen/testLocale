@@ -19,12 +19,14 @@ const user_validation_1 = __importDefault(require("@/resources/user/user.validat
 const user_service_1 = __importDefault(require("@/resources/user/user.service"));
 const cookie_authentication_1 = __importDefault(require("@/middleware/cookie_authentication"));
 const region_model_1 = __importDefault(require("@/resources/region/region.model"));
+const user_blaclistModel_1 = __importDefault(require("@/resources/user/user.blaclistModel"));
 class UserController {
     constructor() {
         this.path = '/users';
         this.router = (0, express_1.Router)();
         this.UserService = new user_service_1.default();
         this.region = region_model_1.default;
+        this.blaclist = user_blaclistModel_1.default;
         this.userlayout = '.././views/layouts/user-layout';
         this.register = (req, res, next) => __awaiter(this, void 0, void 0, function* () {
             try {
@@ -70,6 +72,34 @@ class UserController {
             res.status(200).render('register');
             // res.json({data: 'Welcome to our api'})
         };
+        this.user_logout = (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+            try {
+                const authHeader = req.headers['cookie']; // get the session cookie from request header
+                if (!authHeader)
+                    return res.sendStatus(204); // No content
+                const cookie = authHeader.split('=')[1]; // If there is, split the cookie string to get the actual jwt token
+                const accessToken = cookie.split(';')[0];
+                const checkIfBlacklisted = yield user_blaclistModel_1.default.findOne({ token: accessToken }); // Check if that token is blacklisted
+                // if true, send a no content response.
+                if (checkIfBlacklisted)
+                    return res.sendStatus(204);
+                // otherwise blacklist token
+                const newBlacklist = new this.blaclist({
+                    token: accessToken,
+                });
+                yield newBlacklist.save();
+                // Also clear request cookie on client
+                res.setHeader('Clear-Site-Data', '"cookies"');
+                res.redirect('login');
+            }
+            catch (err) {
+                res.status(500).json({
+                    status: 'error',
+                    message: 'Internal Server Error',
+                });
+            }
+            res.end();
+        });
         this.findRegion = (req, res, next) => __awaiter(this, void 0, void 0, function* () {
             try {
                 const allRegionsData = yield this.region.find({}).lean();
@@ -85,12 +115,13 @@ class UserController {
     initialiseRoutes() {
         // this.router.get(`${this.path}`, authenticated, this.getUser)
         this.router.get(`${this.path}`, cookie_authentication_1.default, this.getUser);
-        this.router.get(`${this.path}/welcome`, this.welcome);
+        this.router.get('/', this.welcome);
         this.router.get(`${this.path}/login`, this.userLogin);
         this.router.get(`${this.path}/signup`, this.user_signup);
         this.router.get(`${this.path}/regions`, cookie_authentication_1.default, this.findRegion);
         this.router.post(`${this.path}/register`, (0, validation_middleware_1.default)(user_validation_1.default.register), this.register);
         this.router.post(`${this.path}/login`, (0, validation_middleware_1.default)(user_validation_1.default.login), this.login);
+        this.router.get(`${this.path}/logout`, this.user_logout);
     }
 }
 exports.default = UserController;

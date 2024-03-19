@@ -37,7 +37,7 @@ class App {
     }
     initialiseControllers(controllers) {
         controllers.forEach((controller) => {
-            this.express.use('/api/v1', controller.router);
+            this.express.use('/', controller.router);
         });
     }
     initialiseErrorHandling() {

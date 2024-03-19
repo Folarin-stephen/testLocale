@@ -2,7 +2,7 @@
 
 body {
     font-family: Arial, sans-serif;
-    background-color: #f3f0f0;
+    background-color: #fcf8f8;
     margin: 0;
     padding: 0;
 }
@@ -46,4 +46,14 @@ body {
 
 .history p {
     margin: 20px 0;
+}
+
+.topnav {
+    background-color: black;
+    border: 1px solid black;
+}
+
+.topnav a {
+    color: #fcf8f8;
+    text-decoration: none;
 }
