@@ -13,7 +13,7 @@ class UserController implements Controller {
     public router = Router();
     private UserService = new UserService();
     private region = RegionModel
-    public userlayout = '.././views/layouts/user-layout'
+    public userlayout = '../layouts/user-layout'
 
     constructor() {
         this.initialiseRoutes();
