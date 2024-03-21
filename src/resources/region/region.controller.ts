@@ -52,9 +52,13 @@ class RegionController implements Controller {
         next: NextFunction
     ): Promise<Response | void> => {
         try {
-            const { _id, geopolitical_zone, states, population, history, language_Spoken } = req.body;
+            const { _id, geopolitical_zone, states,  history, language_Spoken } = req.body;
+            console.log(req.body);
+            
 
-            const region = await this.RegionService.create(_id, geopolitical_zone, states, population, history, language_Spoken );
+            const region = await this.RegionService.create(_id, geopolitical_zone, states, history, language_Spoken );
+            console.log(region);
+            
 
             res.status(201).json({ region });
         } catch (error) {

@@ -2,6 +2,7 @@ import { Schema, model } from 'mongoose';
 import bcrypt from 'bcrypt';
 import User from '@/resources/user/user.interface';
 import jwt from 'jsonwebtoken'
+import crypto from 'node:crypto'
 
 const UserSchema = new Schema(
     {
@@ -25,6 +26,19 @@ const UserSchema = new Schema(
             required: true,
             default: "user"
         },
+
+        verified: {
+            type: Boolean,
+            required: true,
+            default: false
+        },
+
+        apiKey: {
+            type: String,
+            required: true,
+
+
+        }
     },
     { timestamps: true }
 );

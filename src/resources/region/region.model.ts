@@ -1,7 +1,7 @@
 import { Schema, model, Mongoose} from 'mongoose';
 import autoIncrement from 'mongoose-auto-increment';
 
-import {Region} from '@/resources/region/region.interface';
+import {IRegion} from '@/resources/region/region.interface';
 
 
 
@@ -45,7 +45,7 @@ const RegionSchema = new Schema(
 //     incrementBy: 1 // The increment step
 // });
 
-export default model<Region>('Region', RegionSchema);
+export default model<IRegion>('Region', RegionSchema);
 
 // const mongoose = require('mongoose');
 // const autoIncrement = require('mongoose-auto-increment');

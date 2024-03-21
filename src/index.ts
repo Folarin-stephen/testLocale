@@ -4,11 +4,12 @@ import validateEnv from '@/utils/validateEnv';
 import App from './app';
 import RegionController from '@/resources/region/region.controller';
 import UserController from '@/resources/user/user.controller';
+import StateController from '@/resources/state/state.controller'
 
 validateEnv();
 
 const app = new App(
-    [new RegionController(), new UserController()],
+    [ new StateController(), new RegionController(), new UserController()],
     Number(process.env.PORT)
 );
 

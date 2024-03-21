@@ -1,28 +1,28 @@
 import Joi from 'joi';
 
-const create = Joi.object({
+const createState = Joi.object({
     _id: Joi.number().required(),
 
     geopolitical_zone: Joi.string().required(),
 
-    states: Joi.array().items(Joi.object({
-        name: Joi.string().required(),
-        capital: Joi.string().required(),
+    name:Joi.string().required(),
+
+    localGovernments: Joi.array().items(Joi.object({
+        lname: Joi.string().required()
     })),
 
-    history: Joi.object({
-        pre_colonial_era: Joi.string(),
-        colonial_era: Joi.string(),
-        post_independence: Joi.string(),
-        civil_war: Joi.string(),
-        militancy_and_resource_control_agitations: Joi.string(),
-        development_challenges: Joi.string(),
-        political_influence: Joi.string(),
-        economic_contribution: Joi.string(),
-        population: Joi.string()
+    overview: Joi.object({
+        capital: Joi.string(),
+        population: Joi.string(),
+        location: Joi.string(),
+        economy: Joi.string(),
+        tourism: Joi.string(),
+        transportation: Joi.string(),
+        culture: Joi.string(),
+        religion: Joi.string(),
         }),
 
     language_Spoken: Joi.string().required(),
 });
 
-export default { create };
+export default { createState };

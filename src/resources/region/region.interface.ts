@@ -19,7 +19,7 @@ interface History {
 }
 
 
-interface Region extends Document {
+interface IRegion extends Document {
     _id: number;
     geopolitical_zone: string;
     states: State[];
@@ -27,4 +27,4 @@ interface Region extends Document {
     language_Spoken: string;
 }
 
-export  { Region, History, State }
+export  { IRegion, History, State }

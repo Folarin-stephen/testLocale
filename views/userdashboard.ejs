@@ -3,7 +3,7 @@
 </div>
 
 <div class="search-container">
-    <form action="/search/regions"  method="get">
+    <form action="/users/search/regions"  method="get">
         <div class="region-container">
 
             <h2 style="color: black;">Region search</h2>
@@ -13,41 +13,46 @@
                 <option value="">select</option>
                 <option value="South-South" input type="search" name="region" placeholder="">South South</option>
                 <option value="South-West" input type="search" name="region" placeholder="">South West</option>
-                <option value="South-East" input type="search" name="region" placeholder="">South-East</option>
-                <option value="North Central" input type="search" name="region" placeholder="">North-Central</option>
-                <option value="North-West" input type="search" name="region" placeholder="">North-West</option>
-                <option value="North-East" input type="search" name="region" placeholder="">North-East</option>
+                <option value="South-East" input type="search" name="region" placeholder="">South East</option>
+                <option value="North-Central" input type="search" name="region" placeholder="">North Central</option>
+                <option value="North-West" input type="search" name="region" placeholder="">North West</option>
+                <option value="North-East" input type="search" name="region" placeholder="">North East</option>
             </select>
        </div>
         <input class="button-user" type="submit" value="Search">
     </form>
 </div>
 
-<form action="/search/states">
-    <div class="state-container">
-
-        <h2 style="color: black;">State search</h2>
-        <label for="state">
+<div class="state-container"></div>
+    <form action="/users/search/states">
+            <h2 style="color: black;">State search</h2>
+            <label for="state">
             State
             </label>
             <select name="state" id="region">
                 <option value="">select</option>
-                <option value="Abia" input type="search" name="region" placeholder="">Abia</option>
-                <option value="Adamawa" input type="search" name="region" placeholder="">Adamawa</option>
-                <option value="Akwa-Ibom" input type="search" name="region" placeholder="">Akwa-Ibom</option>
-                <option value="Anambra" input type="search" name="region" placeholder="">Anambra</option>
-                <option value="Bauchi" input type="search" name="region" placeholder="">Bauchi</option>
-                <option value="Bayelsa" input type="search" name="region" placeholder="">Bayelsa</option>
+                <option value="Abia State" input type="search" name="region" placeholder="">Abia</option>
+                <option value="Adamawa State" input type="search" name="region" placeholder="">Adamawa</option>
+                <option value="Akwa-Ibom State" input type="search" name="region" placeholder="">Akwa-Ibom</option>
+                <option value="Anambra State" input type="search" name="region" placeholder="">Anambra</option>
+                <option value="Bauchi State" input type="search" name="region" placeholder="">Bauchi</option>
+                <option value="Bayelsa State" input type="search" name="region" placeholder="">Bayelsa</option>
             </select>
             <input class="button-user" type="submit" value="Search">
-    </div>
-
-</form>
+    
+    </form>
+</div>
 
 
 <div class="get-region-btn">
     <a href="/users/regions">
         <button>Get All regions</button>
+    </a>
+</div>
+
+<div class="get-state-btn">
+    <a href="/users/states">
+        <button>Get All states</button>
     </a>
 </div>
    

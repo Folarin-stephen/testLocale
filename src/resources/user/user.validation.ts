@@ -7,7 +7,11 @@ const register = Joi.object({
 
     password: Joi.string().min(6).required(),
 
-    role: Joi.string().required()
+    role: Joi.string().required(),
+
+    verify: Joi.boolean(),
+
+    apiKey: Joi.string()
 });
 
 const login = Joi.object({

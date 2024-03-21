@@ -1,0 +1,57 @@
+<div class="container">
+   
+        <div class="state">
+            <h2><%= state.name %></h2>
+
+            <h2><%= state.geopolitical_zone%></h2>
+
+            <ul class="local-governments">
+                <h4>Local Governments</h4>
+                <% state.localGovernments.forEach(function(localgovernment) { %>
+                    <li><strong><%= localgovernment.lname %></strong></li>
+                <% }); %>
+            </ul>
+
+            <div class="history">
+                <h3>Overview</h3>
+                <div class="capital">
+                    <h5><strong>Capital</strong></h5>
+                    <p><%= state.overview.capital %></p>
+                </div>
+                <div class="population">
+                    <h5><strong>Population</strong></h5>
+                    <p><%= state.overview.population%></p>  
+                </div>
+               <div class="economy">
+                <h5><strong>Economy</strong></h5>
+                <p><%= state.overview.economy%></p>
+               </div>
+                
+               <div class="transportation">
+                <h5><strong>Transportation</strong></h5>
+                <p><%= state.overview.transportation%></p>
+               </div>
+                
+                <div class="culture">
+                    <h5><strong>Culture</strong></h5>
+                    <p><%= state.overview.culture%></p>
+                </div>
+                
+                <div class="tourism">
+                    <h5><strong>Tourism</strong></h5>
+                    <p><%= state.overview.tourism%></p>
+                </div>
+
+                <div class="language">
+                    <h5><strong>Language</strong></h5>
+                    <p><%= state.language_Spoken%></p>
+                </div>
+                
+                <div class="religion">
+                    <h5><strong>religion</strong></h5>
+                    <p><%= state.overview.religion%></p>
+                </div> 
+                <!-- Add more paragraphs for other historical sections -->
+            </div>
+        </div>
+    </div>

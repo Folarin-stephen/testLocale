@@ -7,15 +7,23 @@ import UserService from '@/resources/user/user.service';
 import authenticated from '@/middleware/authenticated.middleware';
 import verifyCookie from '@/middleware/cookie_authentication';
 import RegionModel from '@/resources/region/region.model';
+import StateModel from '@/resources/state/state.model'
 import Blacklist from '@/resources/user/user.blaclistModel';
+import {transporter} from '@/utils/emailService'
+import userModel from '@/resources/user/user.model'
+import IUser from '@/resources/user/user.interface'
+import {IRegion} from '@/resources/region/region.interface'
+import {IState} from '@/resources/state/state.interface'
 
 class UserController implements Controller {
     public path = '/users';
     public router = Router();
     private UserService = new UserService();
     private region = RegionModel
+    private state = StateModel
     private blaclist = Blacklist
     public userlayout = '.././views/layouts/user-layout'
+   private users = userModel
 
     constructor() {
         this.initialiseRoutes();
@@ -32,6 +40,24 @@ class UserController implements Controller {
             verifyCookie,
             this.findRegion
         )
+        this.router.get(
+            `${this.path}/search/regions`,
+            verifyCookie,
+            this.findOneRegion
+        )
+        this.router.get(
+            `${this.path}/search/states`,
+            verifyCookie,
+            this.findOneState
+        )
+
+        this.router.get(
+            `${this.path}/states`,
+            verifyCookie,
+            this.findStates
+        )
+        
+        this.router.get('/verify', this.verify )
 
         this.router.post(
             `${this.path}/register`,
@@ -52,6 +78,66 @@ class UserController implements Controller {
         
     }
 
+    private findOneState = async (
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ): Promise<Response | void> =>{
+        const {state} = req.query;
+        console.log(state);
+        
+
+        const stateS: IState | null = await this.state.findOne({ name: state })
+
+        if (!stateS) {
+            return res.status(400).json({message: "Invalid Region"})
+        }
+
+    
+
+        res.status(200).render('displayOneState', { state: stateS, layout: this.userlayout })
+    }
+
+    private findOneRegion = async (
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ): Promise<Response | void> =>{
+        const {region} = req.query;
+        console.log(region);
+        
+
+        const regionR: IRegion | null = await RegionModel.findOne({ geopolitical_zone: region })
+
+        if (!regionR) {
+            return res.status(400).json({message: "Invalid State"})
+        }
+
+    
+
+        res.status(200).render('displayOneRegion', { region: regionR, layout: this.userlayout })
+    }
+
+    private verify = async (
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ): Promise<Response | void> =>{
+        const {token} = req.query;
+
+        const user: IUser | null = await userModel.findOne({ apiKey: token })
+
+        if (!user) {
+            return res.status(400).json({message: "Invalid token"})
+        }
+
+        user.verified = true;
+        await user.save();
+
+        res.status(200).json({ message: 'Email verified successfully' })
+    }
+
+
     private register = async (
         req: Request,
         res: Response,
@@ -65,7 +151,22 @@ class UserController implements Controller {
                 email,
                 password,
                 role
+               
             );
+
+            // const mailOptions = {
+            //     from: process.env.EMAIL_USERNAME,
+            //     to: email,
+            //     subject: 'Email Verification',
+            //     text: `Click the following link to verify your account: http://localhost:${process.env.PORT}/verify?token=${this.user.apikey}`
+            // }
+
+            // transporter.sendMail(mailOptions, (error, info) => {
+            //     if (error) {
+            //         console.error('Error sending email:', error.message);
+            //         return res.status(500).json({message: 'Failed to send verification email'})
+            //     }
+            // })
 
             res.status(201).redirect('login');
         } catch (error: any) {
@@ -89,6 +190,7 @@ class UserController implements Controller {
             };
 
             const token = await this.UserService.login(email, password);
+
 
             res.cookie("SessionID", token, options); 
 
@@ -176,6 +278,20 @@ class UserController implements Controller {
             const allRegionsData = await this.region.find({}).lean();
     
             res.render('display', { regions: allRegionsData, layout: this.userlayout });
+        } catch (err) {
+            console.error(err);
+            res.status(500).send('Internal Server Error');
+        }
+    }
+       private findStates = async (
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ): Promise< Response | void > =>{
+        try {
+            const allStatesData = await this.state.find({}).lean();
+    
+            res.render('displayStates', { states: allStatesData, layout: this.userlayout });
         } catch (err) {
             console.error(err);
             res.status(500).send('Internal Server Error');

@@ -20,10 +20,10 @@ class RegionService {
     /**
      * Create a new region
      */
-    create(_id, geopolitical_zone, states, population, history, language_Spoken) {
+    create(_id, geopolitical_zone, states, history, language_Spoken) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const region = yield this.region.create({ _id, geopolitical_zone, population, states, history, language_Spoken });
+                const region = yield this.region.create({ _id, geopolitical_zone, states, history, language_Spoken });
                 return region;
             }
             catch (error) {

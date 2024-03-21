@@ -37,6 +37,9 @@ class App {
     }
     initialiseControllers(controllers) {
         controllers.forEach((controller) => {
+            this.express.get('/', (req, res) => {
+                res.render('index');
+            });
             this.express.use('/', controller.router);
         });
     }

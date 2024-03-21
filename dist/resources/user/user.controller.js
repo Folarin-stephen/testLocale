@@ -19,19 +19,63 @@ const user_validation_1 = __importDefault(require("@/resources/user/user.validat
 const user_service_1 = __importDefault(require("@/resources/user/user.service"));
 const cookie_authentication_1 = __importDefault(require("@/middleware/cookie_authentication"));
 const region_model_1 = __importDefault(require("@/resources/region/region.model"));
+const state_model_1 = __importDefault(require("@/resources/state/state.model"));
 const user_blaclistModel_1 = __importDefault(require("@/resources/user/user.blaclistModel"));
+const user_model_1 = __importDefault(require("@/resources/user/user.model"));
 class UserController {
     constructor() {
         this.path = '/users';
         this.router = (0, express_1.Router)();
         this.UserService = new user_service_1.default();
         this.region = region_model_1.default;
+        this.state = state_model_1.default;
         this.blaclist = user_blaclistModel_1.default;
         this.userlayout = '.././views/layouts/user-layout';
+        this.users = user_model_1.default;
+        this.findOneState = (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+            const { state } = req.query;
+            console.log(state);
+            const stateS = yield this.state.findOne({ name: state });
+            if (!stateS) {
+                return res.status(400).json({ message: "Invalid Region" });
+            }
+            res.status(200).render('displayOneState', { state: stateS, layout: this.userlayout });
+        });
+        this.findOneRegion = (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+            const { region } = req.query;
+            console.log(region);
+            const regionR = yield region_model_1.default.findOne({ geopolitical_zone: region });
+            if (!regionR) {
+                return res.status(400).json({ message: "Invalid State" });
+            }
+            res.status(200).render('displayOneRegion', { region: regionR, layout: this.userlayout });
+        });
+        this.verify = (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+            const { token } = req.query;
+            const user = yield user_model_1.default.findOne({ apiKey: token });
+            if (!user) {
+                return res.status(400).json({ message: "Invalid token" });
+            }
+            user.verified = true;
+            yield user.save();
+            res.status(200).json({ message: 'Email verified successfully' });
+        });
         this.register = (req, res, next) => __awaiter(this, void 0, void 0, function* () {
             try {
                 const { Full_Name, email, password, role } = req.body;
                 const token = yield this.UserService.register(Full_Name, email, password, role);
+                // const mailOptions = {
+                //     from: process.env.EMAIL_USERNAME,
+                //     to: email,
+                //     subject: 'Email Verification',
+                //     text: `Click the following link to verify your account: http://localhost:${process.env.PORT}/verify?token=${this.user.apikey}`
+                // }
+                // transporter.sendMail(mailOptions, (error, info) => {
+                //     if (error) {
+                //         console.error('Error sending email:', error.message);
+                //         return res.status(500).json({message: 'Failed to send verification email'})
+                //     }
+                // })
                 res.status(201).redirect('login');
             }
             catch (error) {
@@ -110,6 +154,16 @@ class UserController {
                 res.status(500).send('Internal Server Error');
             }
         });
+        this.findStates = (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+            try {
+                const allStatesData = yield this.state.find({}).lean();
+                res.render('displayStates', { states: allStatesData, layout: this.userlayout });
+            }
+            catch (err) {
+                console.error(err);
+                res.status(500).send('Internal Server Error');
+            }
+        });
         this.initialiseRoutes();
     }
     initialiseRoutes() {
@@ -119,6 +173,10 @@ class UserController {
         this.router.get(`${this.path}/login`, this.userLogin);
         this.router.get(`${this.path}/signup`, this.user_signup);
         this.router.get(`${this.path}/regions`, cookie_authentication_1.default, this.findRegion);
+        this.router.get(`${this.path}/search/regions`, cookie_authentication_1.default, this.findOneRegion);
+        this.router.get(`${this.path}/search/states`, cookie_authentication_1.default, this.findOneState);
+        this.router.get(`${this.path}/states`, cookie_authentication_1.default, this.findStates);
+        this.router.get('/verify', this.verify);
         this.router.post(`${this.path}/register`, (0, validation_middleware_1.default)(user_validation_1.default.register), this.register);
         this.router.post(`${this.path}/login`, (0, validation_middleware_1.default)(user_validation_1.default.login), this.login);
         this.router.get(`${this.path}/logout`, this.user_logout);

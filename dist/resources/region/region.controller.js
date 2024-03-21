@@ -37,8 +37,10 @@ class RegionController {
         });
         this.create = (req, res, next) => __awaiter(this, void 0, void 0, function* () {
             try {
-                const { _id, geopolitical_zone, states, population, history, language_Spoken } = req.body;
-                const region = yield this.RegionService.create(_id, geopolitical_zone, states, population, history, language_Spoken);
+                const { _id, geopolitical_zone, states, history, language_Spoken } = req.body;
+                console.log(req.body);
+                const region = yield this.RegionService.create(_id, geopolitical_zone, states, history, language_Spoken);
+                console.log(region);
                 res.status(201).json({ region });
             }
             catch (error) {
